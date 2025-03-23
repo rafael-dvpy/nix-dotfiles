@@ -1,0 +1,68 @@
+{
+    "position": "bottom", 
+    "height": 30,
+    "modules-left": ["hyprland/workspaces"],
+    "modules-right": ["network", "pulseaudio", "battery", "custom/date", "clock", "custom/power"],
+    // Modules configuration
+	"hyprland/workspaces": {
+		"format": "{icon}",
+         	"format-icons": {
+             		"1": "",
+             		"2": "",
+             		"3": "",
+             		"4": "",
+             		"5": "",
+		"active": "",
+		"default": ""
+         },
+       "persistent-workspaces": {
+             "*": 5, // 5 workspaces by default on every monitor
+       }
+     },
+	"custom/date": {
+    		"format": "󰸗 {}",
+		"interval": 3600,
+		"exec": "$HOME/bin/waybar-date.sh"
+	},
+	"custom/power": {
+		"format": "󰐥",
+		"on-click": "$HOME/bin/waybar-power.sh"
+	},
+	"clock": {
+		"format": "󰅐 {:%H:%M}",
+        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        	"format-alt": "{:%Y-%m-%d}"
+	},
+	"battery": {
+        	"states": {
+            		"warning": 30,
+            		"critical": 15,
+        	},
+        	"format": "{icon} {capacity}%",
+        	"format-charging": "󰂄 {capacity}%",
+        	"format-plugged": "󰂄{capacity}%",
+        	"format-alt": "{time} {icon}",
+        	"format-full": "󱈑 {capacity}%",
+        	"format-icons": ["󱊡", "󱊢", "󱊣"]
+	},
+	"network": {
+        	"format-wifi": "  {essid}",
+        	"format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+        	"format-linked": "{ifname} (No IP) 󰤮 ",
+        	"format-disconnected": "󰤮 Disconnected",
+        	"format-alt": "{ifname}: {ipaddr}/{cidr}"
+	},
+	"pulseaudio": {
+		"format": "{icon}  {volume}%",
+        	"format-muted": "󰖁 Muted",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+    }
+}
