@@ -58,6 +58,8 @@ in
         cp = "cp -riv";
         cat = "bat --paging=never --style=plain";
         ls = "exa -a --icons";
+        lg = "lazygit";
+        ld = "lazydocker";
         tree = "exa --tree --icons";
         nd = "nix develop -c $SHELL";
         v = "nvim";

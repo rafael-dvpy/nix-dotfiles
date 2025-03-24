@@ -18,6 +18,7 @@
     ./zsh
     ./git
     ./docker
+    ./tmux
 
     # system
     ./packages

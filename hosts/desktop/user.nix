@@ -21,6 +21,7 @@
     zsh.enable = true;
     git.enable = true;
     docker.enable = true;
+    tmux.enable = true;
 
     # system
     packages.enable = true;

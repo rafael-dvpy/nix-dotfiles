@@ -7,9 +7,9 @@
 {
   environment.defaultPackages = [ ];
   services.xserver.desktopManager.xterm.enable = false;
-
   programs.zsh.enable = true;
-  programs.waybar.enable = true;
+
+  virtualisation.docker.enable = true;
 
   # Laptop-specific packages (the other ones are installed in `packages.nix`)
   environment.systemPackages = with pkgs; [
@@ -115,7 +115,7 @@
   users.users.rafael = {
     isNormalUser = true;
     description = "Rafael Oliveira";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "docker" "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       #  thunderbir
