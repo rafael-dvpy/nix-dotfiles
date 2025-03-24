@@ -12,10 +12,10 @@ in
         source = config.lib.file.mkOutOfStoreSymlink ./nvim-config;
       };
     };
+
     home.sessionVariables = {
       EDITOR = "nvim";
     };
-
 
   };
 }

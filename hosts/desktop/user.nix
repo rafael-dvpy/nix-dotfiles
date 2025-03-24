@@ -12,6 +12,7 @@
     dunst.enable = true;
     wofi.enable = true;
     zen.enable = true;
+    gtk.enable = true;
 
     # cli
     ghostty.enable = true;

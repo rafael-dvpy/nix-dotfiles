@@ -9,18 +9,18 @@ in
 
     programs.tmux = {
       enable = true;
+      baseIndex = 1;
       extraConfig = /*bash*/''
+
+
         unbind r
         bind r source-file ~/.config/tmux/tmux.conf
 
         set -g prefix C-s
 
-        # Start windows and panes at 1, not 0
-        set -g base-index 1
-        setw -g pane-base-index 1
-
         # act like vim
         setw -g mode-keys vi
+        bind-key -r f run-shell "tmux neww tmux-sessionizer"
         bind-key h select-pane -L
         bind-key j select-pane -D
         bind-key k select-pane -U

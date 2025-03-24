@@ -9,6 +9,7 @@
     ./dunst
     ./wofi
     ./zen
+    ./gtk
 
     # cli
     ./ghostty

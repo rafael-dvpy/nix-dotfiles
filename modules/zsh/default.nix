@@ -28,6 +28,7 @@ in
         export ZK_NOTEBOOK_DIR="~/stuff/notes";
         export DIRENV_LOG_FORMAT="";
         bindkey '^ ' autosuggest-accept
+        bindkey -s ^f "tmux-sessionizer\n"
 
         edir() { tar -cz $1 | age -p > $1.tar.gz.age && rm -rf $1 &>/dev/null && echo "$1 encrypted" }
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
@@ -36,7 +37,7 @@ in
       # basically aliases for directories: 
       # `cd ~dots` will cd into ~/.config/nixos
       dirHashes = {
-        dots = "$HOME/.config/nixos";
+        dots = "$HOME/.config/home-manager";
         stuff = "$HOME/stuff";
         media = "/run/media/$USER";
         junk = "$HOME/stuff/other";
@@ -66,7 +67,7 @@ in
         tree = "exa --tree --icons";
         nd = "nix develop -c $SHELL";
         v = "nvim";
-        rebuild = "sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} --fast; notify-send 'Rebuild complete\!'";
+        rebuild = "nh switch --flake $HOME/.config/home-manager#${hostName}; notify-send 'Rebuild complete\!'";
       };
 
       # Source all plugins, nix-style

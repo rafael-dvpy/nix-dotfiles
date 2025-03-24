@@ -11,6 +11,7 @@ in
     home.packages = with pkgs; [
       ripgrep
       yazi
+      nh
       pavucontrol
       ffmpeg
       tealdeer

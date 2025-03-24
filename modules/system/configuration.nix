@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   environment.defaultPackages = [ ];
@@ -19,6 +19,7 @@
   ];
 
   environment.variables = {
+    FLAKE = "$HOME/.config/home-manager/";
     XDG_DOCUMENT_DIR = "$HOME/stuff/other/";
     XDG_DOWNLOAD_DIR = "$HOME/stuff/other/";
     XDG_VIDEOS_DIR = "$HOME/stuff/other/";
@@ -27,6 +28,16 @@
     XDG_DESKTOP_DIR = "$HOME/stuff/other/";
     XDG_PUBLICSHARE_DIR = "$HOME/stuff/other/";
     XDG_TEMPLATES_DIR = "$HOME/stuff/other/";
+  };
+
+  services.greetd = {
+    enable = true;
+    package = pkgs.greetd.tuigreet;
+    settings = {
+      default_session = {
+        command = "${lib.makeBinPath [ pkgs.greetd.tuigreet ]}/tuigreet --time --cmd hyprland";
+      };
+    };
   };
 
   # Install fonts
