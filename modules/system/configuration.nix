@@ -6,6 +6,7 @@
 
 {
   environment.defaultPackages = [ ];
+  programs.firefox.enable = false;
   services.xserver.desktopManager.xterm.enable = false;
   programs.zsh.enable = true;
 

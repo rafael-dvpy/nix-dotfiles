@@ -67,7 +67,7 @@ in
         tree = "exa --tree --icons";
         nd = "nix develop -c $SHELL";
         v = "nvim";
-        rebuild = "nh switch --flake $HOME/.config/home-manager#${hostName}; notify-send 'Rebuild complete\!'";
+        rebuild = "nh os switch $HOME/.config/home-manager ; notify-send 'Rebuild complete\!'";
       };
 
       # Source all plugins, nix-style
