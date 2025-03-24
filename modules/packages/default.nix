@@ -9,6 +9,8 @@ in
   options.modules.packages = { enable = mkEnableOption "packages"; };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      vesktop
+      stremio
       neofetch
       ripgrep
       stremio
@@ -35,7 +37,6 @@ in
       python3
       lua
       mpv
-      firefox
       eza
       pqiv
       wf-recorder

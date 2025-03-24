@@ -9,6 +9,7 @@
   programs.firefox.enable = false;
   services.xserver.desktopManager.xterm.enable = false;
   programs.zsh.enable = true;
+  programs.noisetorch.enable = true;
 
   virtualisation.docker.enable = true;
 
