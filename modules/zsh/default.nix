@@ -57,7 +57,10 @@ in
         mv = "mv -iv";
         cp = "cp -riv";
         cat = "bat --paging=never --style=plain";
-        ls = "exa -a --icons";
+        ls = "exa --icons";
+        ll = "exa -l --icons";
+        la = "exa -a --icons";
+        lla = "exa -la --icons";
         lg = "lazygit";
         ld = "lazydocker";
         tree = "exa --tree --icons";
