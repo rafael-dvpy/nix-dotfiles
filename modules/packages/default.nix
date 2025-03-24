@@ -10,6 +10,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       ripgrep
+      pavucontrol
       ffmpeg
       tealdeer
       htop

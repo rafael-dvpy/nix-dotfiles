@@ -8,6 +8,7 @@
     ./waybar
     ./dunst
     ./wofi
+    ./zen
 
     # cli
     ./ghostty

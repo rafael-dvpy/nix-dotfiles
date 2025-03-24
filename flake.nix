@@ -9,6 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+
     xremap-flake.url = "github:xremap/nix-flake";
   };
 
@@ -70,6 +72,7 @@
               useGlobalPkgs = true;
               extraSpecialArgs = {
                 inherit inputs;
+                inherit system;
                 inherit (config.networking) hostName;
               };
               # Home manager config (configures programs like firefox, zsh, eww, etc)

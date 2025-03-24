@@ -11,6 +11,7 @@
     waybar.enable = true;
     dunst.enable = true;
     wofi.enable = true;
+    zen.enable = true;
 
     # cli
     ghostty.enable = true;
