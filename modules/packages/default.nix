@@ -10,6 +10,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       ripgrep
+      yazi
       pavucontrol
       ffmpeg
       tealdeer
@@ -28,7 +29,6 @@ in
       imagemagick
       age
       libnotify
-      git
       python3
       lua
       mpv

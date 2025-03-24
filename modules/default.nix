@@ -16,6 +16,8 @@
     ./nvim
     ./scripts
     ./zsh
+    ./git
+    ./docker
 
     # system
     ./packages

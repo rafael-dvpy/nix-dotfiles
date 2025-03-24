@@ -19,6 +19,8 @@
     nvim.enable = true;
     scripts.enable = true;
     zsh.enable = true;
+    git.enable = true;
+    docker.enable = true;
 
     # system
     packages.enable = true;
