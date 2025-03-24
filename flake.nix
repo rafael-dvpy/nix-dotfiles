@@ -63,20 +63,6 @@
             '';
           }
 
-          #              modmap:
-          #              - name: Global
-          #                remap:
-          #                  rightctrl: equal
-          #              virtual_modifiers:
-          #                - CapsLock
-          #              keymap:
-          #                - remap:
-          #                    CapsLock-i: Up
-          #                    CapsLock-j: Left
-          #                    CapsLock-k: Down
-          #                    CapsLock-l: Right
-
-
           home-manager.nixosModules.home-manager
           ({ config, ... }: {
             home-manager = {

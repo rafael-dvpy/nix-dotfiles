@@ -16,7 +16,7 @@
     ghostty.enable = true;
     foot.enable = false;
     nvim.enable = true;
-    scripts.enable = false;
+    scripts.enable = true;
     zsh.enable = true;
 
     # system

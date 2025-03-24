@@ -4,18 +4,11 @@ with lib;
 let
   cfg =
     config.modules.packages;
-  screen = pkgs.writeShellScriptBin "screen" ''${builtins.readFile ./screen}'';
-  bandw = pkgs.writeShellScriptBin "bandw" ''${builtins.readFile ./bandw}'';
-  maintenance = pkgs.writeShellScriptBin "maintenance" ''${builtins.readFile ./maintenance}'';
-
 in
 {
   options.modules.packages = { enable = mkEnableOption "packages"; };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      screen
-      bandw
-      maintenance
       ripgrep
       ffmpeg
       tealdeer
@@ -41,9 +34,6 @@ in
       firefox
       eza
       pqiv
-      screen
-      bandw
-      maintenance
       wf-recorder
       anki-bin
       cargo

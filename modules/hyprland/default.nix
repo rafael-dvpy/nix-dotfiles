@@ -13,6 +13,7 @@ in
       wlsunset
       wl-clipboard
       hyprland
+      grim
     ];
 
     # Optional, hint Electron apps to use Wayland:
