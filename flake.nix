@@ -41,29 +41,28 @@
           ./modules/config-modules/default.nix
           ./hosts/desktop/hardware-configuration.nix
 
-          inputs.xremap-flake.nixosModules.default
-          {
-            services.xremap.yamlConfig = ''
-              modmap:
-                - name: Global
-                  remap:
-                    CAPSLOCK:
-                      held: CAPSLOCK
-                      alone: ESC
-                      alone_timeout_millis: 150
-                    RIGHTCTRL: EQUAL
-              virtual_modifiers:
-                - CapsLock
-              keymap:
-                - name: Schmoving
-                  remap:
-                    CapsLock-i: Up
-                    CapsLock-j: Left
-                    CapsLock-k: Down
-                    CapsLock-l: Right
-
-            '';
-          }
+          # inputs.xremap-flake.nixosModules.default
+          # {
+          #   services.xremap.yamlConfig = ''
+          #     modmap:
+          #       - name: Global
+          #         remap:
+          #           CAPSLOCK:
+          #             held: CAPSLOCK
+          #             alone: ESC
+          #             alone_timeout_millis: 150
+          #           RIGHTCTRL: EQUAL
+          #     virtual_modifiers:
+          #       - CapsLock
+          #     keymap:
+          #       - name: Schmoving
+          #         remap:
+          #           CapsLock-i: Up
+          #           CapsLock-j: Left
+          #           CapsLock-k: Down
+          #           CapsLock-l: Right
+          #   '';
+          # }
 
           home-manager.nixosModules.home-manager
           ({ config, ... }: {

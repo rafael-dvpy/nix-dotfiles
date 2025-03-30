@@ -5,12 +5,23 @@
 { inputs, config, pkgs, lib, ... }:
 
 {
+  imports = [
+    ./fonts
+    ./env-var
+    ./audio
+    ./greetd
+    ./remaps
+  ];
+
+  fonts.enable = true;
+  audio.enable = true;
+  env-var.enable = true;
+  greetd.enable = true;
+  remaps.enable = true;
+
   environment.defaultPackages = [ ];
-  programs.firefox.enable = false;
   services.xserver.desktopManager.xterm.enable = false;
   programs.zsh.enable = true;
-  programs.noisetorch.enable = true;
-
   virtualisation.docker.enable = true;
 
   # Laptop-specific packages (the other ones are installed in `packages.nix`)
@@ -19,46 +30,6 @@
     tlp
     git
   ];
-
-  environment.variables = {
-    FLAKE = "$HOME/.config/home-manager/";
-    XDG_DOCUMENT_DIR = "$HOME/stuff/other/";
-    XDG_DOWNLOAD_DIR = "$HOME/stuff/other/";
-    XDG_VIDEOS_DIR = "$HOME/stuff/other/";
-    XDG_MUSIC_DIR = "$HOME/stuff/music/";
-    XDG_PICTURES_DIR = "$HOME/stuff/pictures/";
-    XDG_DESKTOP_DIR = "$HOME/stuff/other/";
-    XDG_PUBLICSHARE_DIR = "$HOME/stuff/other/";
-    XDG_TEMPLATES_DIR = "$HOME/stuff/other/";
-  };
-
-  services.greetd = {
-    enable = true;
-    package = pkgs.greetd.tuigreet;
-    settings = {
-      default_session = {
-        command = "${lib.makeBinPath [ pkgs.greetd.tuigreet ]}/tuigreet --time --cmd hyprland";
-      };
-    };
-  };
-
-  # Install fonts
-  fonts = {
-    packages = with pkgs; [
-      jetbrains-mono
-      nerd-fonts.jetbrains-mono
-      roboto
-      openmoji-color
-    ];
-
-    fontconfig = {
-      hinting.autohint = true;
-      defaultFonts = {
-        emoji = [ "OpenMoji Color" ];
-      };
-    };
-  };
-
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Bootloader.
@@ -108,27 +79,12 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enables Audio
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   users.users.rafael = {
     isNormalUser = true;
     description = "Rafael Oliveira";
-    extraGroups = [ "docker" "networkmanager" "wheel" ];
+    extraGroups = [ "uinput" "docker" "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       #  thunderbir
