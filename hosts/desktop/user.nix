@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/default.nix
+    ../../modules/home-modules/default.nix
   ];
 
   config.modules = {

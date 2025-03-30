@@ -38,7 +38,7 @@
         modules = [
           { networking.hostName = "desktop"; }
 
-          ./modules/system/configuration.nix
+          ./modules/config-modules/default.nix
           ./hosts/desktop/hardware-configuration.nix
 
           inputs.xremap-flake.nixosModules.default
