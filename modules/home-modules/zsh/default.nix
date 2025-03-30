@@ -65,8 +65,8 @@ in
         lg = "lazygit";
         ld = "lazydocker";
         tree = "exa --tree --icons";
-        nd = "nix develop -c $SHELL";
         v = "nvim";
+        nd = "() {nix develop $HOME/.config/home-manager#$1 -c zsh; echo 'You entered the $1 dev shell\!'}";
         rebuild = "nh os switch $HOME/.config/home-manager ; notify-send 'Rebuild complete\!'";
       };
 

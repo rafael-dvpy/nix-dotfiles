@@ -10,8 +10,6 @@
     };
 
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-
-    xremap-flake.url = "github:xremap/nix-flake";
   };
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
@@ -40,30 +38,6 @@
 
           ./modules/config-modules/default.nix
           ./hosts/desktop/hardware-configuration.nix
-
-          # inputs.xremap-flake.nixosModules.default
-          # {
-          #   services.xremap.yamlConfig = ''
-          #     modmap:
-          #       - name: Global
-          #         remap:
-          #           CAPSLOCK:
-          #             held: CAPSLOCK
-          #             alone: ESC
-          #             alone_timeout_millis: 150
-          #           RIGHTCTRL: EQUAL
-          #     virtual_modifiers:
-          #       - CapsLock
-          #     keymap:
-          #       - name: Schmoving
-          #         remap:
-          #           CapsLock-i: Up
-          #           CapsLock-j: Left
-          #           CapsLock-k: Down
-          #           CapsLock-l: Right
-          #   '';
-          # }
-
           home-manager.nixosModules.home-manager
           ({ config, ... }: {
             home-manager = {
@@ -81,9 +55,14 @@
         ];
       };
 
-      devShells.${system}.default =
-        pkgs.mkShell
+
+      devShells.${system} = {
+
+        default = pkgs.mkShell
           {
+            shellHook = ''
+              zsh
+            '';
             buildInputs = with pkgs; [
               neovim
               rustc
@@ -93,6 +72,21 @@
           };
 
 
+        node = pkgs.mkShell
+          {
+            shellHook = ''
+              zsh
+            '';
+            buildInputs = with pkgs; [
+              neovim
+              nodejs
+              rustc
+              cargo
+              libgcc
+            ];
+          };
+
+      };
 
     };
 }
