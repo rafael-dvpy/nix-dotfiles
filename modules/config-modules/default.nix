@@ -66,14 +66,14 @@
 
   # Configure keymap in X11
   services.xserver.xkb = {
-    layout = "br";
+    layout = "us";
     variant = "";
   };
 
   # Configure console keymap
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "br-abnt2";
+    keyMap = "us";
   };
 
   # Enable CUPS to print documents.
