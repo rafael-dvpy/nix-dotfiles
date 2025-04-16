@@ -72,7 +72,7 @@
               ;     (multi f24 (tap-hold $tap-time $hold-time-slow ; lmet))
               c     (multi f24 (tap-hold $tap-time $hold-time      c (layer-toggle cmd)))
               m     (multi f24 (tap-hold $tap-time $hold-time      m (layer-toggle cmd)))
-              caps  (multi f24 (tap-hold $tap-time $hold-time-slow esc lctl))
+              caps  (multi f24 (tap-hold $tap-time $hold-time-slow esc (layer-toggle mouse)))
               c_j (chord escape j)
               c_k (chord escape k)
               c_f (chord delete f)
@@ -92,6 +92,16 @@
               (f   s) C-del 
             )
 
+            (defalias
+              ms↑ (movemouse-up 4 4)
+              ms← (movemouse-left 4 4)
+              ms↓ (movemouse-down 4 4)
+              ms→ (movemouse-right 4 4)
+              mwu (mwheel-up 50 120)
+              mwd (mwheel-down 50 120)
+            )
+
+
             (deflayer base
               grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
               tab      q        w        e        r        t        y        u        i        o        p        [        ]        \
@@ -105,6 +115,14 @@
               tab      C-w      C-tab    C-S-tab  r        C-t      y        bspc     up       @del     ret      [        ]        \
               caps     a        C-del    C-bspc   f        g        h        left     down     right    ;        '        ret
               lsft     z        x        c        v        b        lsft     m        ,        .        /        rsft
+              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+            )
+
+            (deflayer mouse
+              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
+              tab      q        w        e        r        t        y        mwu      @ms↑     mwd        p        [        ]        \
+              caps     mrgt     mmid     mlft     f        g        h        @ms←     @ms↓     @ms→        ;        '        ret
+              lsft     z        x        c        v        b        n        m        ,        .        /        rsft
               lctl     lmet     lalt                       spc                        ralt     rmet     rctl
             )
 
