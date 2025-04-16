@@ -44,34 +44,76 @@
           extraDefCfg = "process-unmapped-keys yes";
           config = ''
             (defsrc
-              caps a s d f h j k l ; i rctrl
+              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
+              tab      q        w        e        r        t        y        u        i        o        p        [        ]        \
+              caps     a        s        d        f        g        h        j        k        l        ;        '        ret
+              lsft     z        x        c        v        b        n        m        ,        .        /        rsft
+              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
             )
 
             (defvar
-              tap-time 200
-              hold-time 200
-              hold-time-slow 300
+              tap-time        200
+              chord-time      15
+              hold-time       200
+              hold-time-slow  300
             )
 
             (defalias
-              del del
-              esc_l-arrow (tap-hold 100 100 esc (layer-toggle arrow))
-              a (multi f24 (tap-hold $tap-time $hold-time-slow a lmet))
-              s (multi f24 (tap-hold $tap-time $hold-time-slow s lalt))
-              d (multi f24 (tap-hold $tap-time $hold-time      d lsft))
-              f (multi f24 (tap-hold $tap-time $hold-time      f lctl))
-              j (multi f24 (tap-hold $tap-time $hold-time      j lctl))
-              k (multi f24 (tap-hold $tap-time $hold-time      k lsft))
-              l (multi f24 (tap-hold $tap-time $hold-time-slow l lalt))
-              ; (multi f24 (tap-hold $tap-time $hold-time-slow ; lmet))
+              del   del
+              spc   (tap-hold 200 200 spc (layer-toggle sym_1))
+
+              a     (multi f24 (tap-hold $tap-time $hold-time-slow a lmet))
+              s     (multi f24 (tap-hold $tap-time $hold-time-slow s lalt))
+              d     (multi f24 (tap-hold $tap-time $hold-time      d lsft))
+              f     (multi f24 (tap-hold $tap-time $hold-time      f lctl))
+              j     (multi f24 (tap-hold $tap-time $hold-time      j lctl))
+              k     (multi f24 (tap-hold $tap-time $hold-time      k lsft))
+              l     (multi f24 (tap-hold $tap-time $hold-time-slow l lalt))
+              ;     (multi f24 (tap-hold $tap-time $hold-time-slow ; lmet))
+              c     (multi f24 (tap-hold $tap-time $hold-time      c (layer-toggle cmd)))
+              m     (multi f24 (tap-hold $tap-time $hold-time      m (layer-toggle cmd)))
+              caps  (multi f24 (tap-hold $tap-time $hold-time-slow esc lctl))
+              c_j (chord escape j)
+              c_k (chord escape k)
+              c_f (chord delete f)
+              c_d (chord delete d)
+              c_s (chord delete s)
+            )
+            (defchords escape $chord-time
+              (j  ) @j
+              (  k) @k
+              (j k) esc 
+            )
+            (defchords delete $chord-time
+              (f    ) @f
+              (  d  ) @d
+              (    s) @s
+              (f d  ) C-bspc 
+              (f   s) C-del 
             )
 
             (deflayer base
-              @esc_l-arrow @a @s @d @f _ @j @k @l @; _ =
+              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
+              tab      q        w        e        r        t        y        u        i        o        p        [        ]        \
+              @caps    @a       @c_s     @c_d     @c_f     g        h        @c_j     @c_k     @l       @;       '        ret
+              lsft     z        x        @c       v        b        n        @m        ,        .        /        rsft
+              lctl     lmet     lalt                       @spc                       ralt     rmet     rctl
             )
 
-            (deflayer arrow
-               _ _ _ @del _ _ left down right _ up =
+            (deflayer cmd
+              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
+              tab      C-w      C-tab    C-S-tab  r        C-t      y        bspc     up       @del     ret      [        ]        \
+              caps     a        C-del    C-bspc   f        g        h        left     down     right    ;        '        ret
+              lsft     z        x        c        v        b        lsft     m        ,        .        /        rsft
+              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+            )
+
+            (deflayer sym_1
+              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
+              tab      S-1      S-2      S-3      S-4      S-5      S-6      S-7      S-8      S-9      S-0      [        ]        \
+              caps     `        -        /        S-/      '        h        ;        S-;      [        ]        '        ret
+              lsft     S-`      S--      \        S-\      S-'      lsft     +        =        S-[      S-]      rsft
+              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
             )
           '';
         };

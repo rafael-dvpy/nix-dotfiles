@@ -230,6 +230,7 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+--
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -243,6 +244,12 @@ require('lazy').setup({
   -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
   --
 
+  {
+  'm4xshen/autoclose.nvim',
+    config = function ()
+      require("autoclose").setup()
+    end,  
+     }, 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
   --    {
@@ -270,7 +277,7 @@ require('lazy').setup({
       },
     },
   },
-
+  
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -370,6 +377,7 @@ require('lazy').setup({
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
+
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
@@ -467,7 +475,12 @@ require('lazy').setup({
       },
     },
   },
-  {
+{
+  "max397574/better-escape.nvim",
+  config = function()
+    require("better_escape").setup()
+  end,
+},  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {

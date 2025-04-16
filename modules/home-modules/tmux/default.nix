@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, pkgs, config, ... }:
 with lib;
 let
   cfg = config.modules.tmux;
@@ -11,8 +11,7 @@ in
       enable = true;
       baseIndex = 1;
       extraConfig = /*bash*/''
-
-
+        set -g default-command ${pkgs.zsh}/bin/zsh
         unbind r
         bind r source-file ~/.config/tmux/tmux.conf
 
