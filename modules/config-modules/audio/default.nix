@@ -7,6 +7,12 @@
     };
 
   config = lib.mkIf config.audio.enable {
+    environment.systemPackages = with pkgs; [
+      alsa-utils
+    ];
+
+    hardware.alsa.enablePersistence = true;
+
     programs.noisetorch.enable = true;
     # Enables Audio
     services.pulseaudio.enable = false;
