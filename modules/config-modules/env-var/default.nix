@@ -9,7 +9,7 @@
   config = lib.mkIf config.env-var.enable {
 
     environment.variables = {
-      FLAKE = "$HOME/.config/home-manager/";
+      NH_FLAKE = "$HOME/.config/home-manager/";
       XDG_DOCUMENT_DIR = "$HOME/stuff/other/";
       XDG_DOWNLOAD_DIR = "$HOME/stuff/other/";
       XDG_VIDEOS_DIR = "$HOME/stuff/other/";
