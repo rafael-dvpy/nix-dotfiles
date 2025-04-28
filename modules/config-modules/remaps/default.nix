@@ -40,101 +40,172 @@
             "/dev/input/by-path/pci-0000:01:00.0-usb-0:5:1.0-event-kbd"
             "/dev/input/by-path/pci-0000:01:00.0-usbv2-0:1:1.1-event-kbd"
             "/dev/input/by-path/pci-0000:01:00.0-usbv2-0:5:1.0-event-kbd"
+            "/dev/input/by-path/pci-0000:0b:00.3-usb-0:3:1.1-event-kbd"
+            "/dev/input/by-path/pci-0000:0b:00.3-usbv2-0:3:1.1-event-kbd"
+            "/dev/input/by-path/pci-0000:01:00.0-usb-0:1:1.0-event-kbd"
+            "/dev/input/by-path/pci-0000:01:00.0-usb-0:1:1.1-event-kbd"
+            "/dev/input/by-path/pci-0000:01:00.0-usbv2-0:1:1.0-event-kbd"
+            "/dev/input/by-path/pci-0000:01:00.0-usbv2-0:1:1.1-event-kbd"
           ];
-          extraDefCfg = "process-unmapped-keys yes";
+          extraDefCfg = ''
+            process-unmapped-keys no
+            concurrent-tap-hold yes
+          '';
           config = ''
             (defsrc
-              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
-              tab      q        w        e        r        t        y        u        i        o        p        [        ]        \
-              caps     a        s        d        f        g        h        j        k        l        ;        '        ret
-              lsft     z        x        c        v        b        n        m        ,        .        /        rsft
-              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+              q w e r t y u i o p
+              a s d f g h j k l ;
+              z x c v b n m , . /
+                     spc
             )
 
-            (defvar
-              tap-time        150
-              chord-time      15
-              hold-time       200
-              hold-time-slow  300
+            (deftemplate charmod (char mod)
+              (switch 
+                ((key-timing 3 less-than 375)) $char break
+                () (tap-hold-release-timeout 200 500 $char $mod $char) break
+              )
             )
 
-            (defalias
-              del   del
-              spc   (tap-hold 200 200 spc (layer-toggle sym_1))
-
-              a     (multi f24 (tap-hold $tap-time $hold-time-slow a lmet))
-              s     (multi f24 (tap-hold $tap-time $hold-time      s lalt))
-              d     (multi f24 (tap-hold $tap-time $hold-time      d lsft))
-              f     (multi f24 (tap-hold $tap-time $hold-time      f lctl))
-              j     (multi f24 (tap-hold $tap-time $hold-time      j lctl))
-              k     (multi f24 (tap-hold $tap-time $hold-time      k lsft))
-              g     (multi f24 (tap-hold $tap-time $hold-time      g (layer-toggle sym_1)))
-              h     (multi f24 (tap-hold $tap-time $hold-time      h (layer-toggle sym_1)))
-              l     (multi f24 (tap-hold $tap-time $hold-time      l lalt))
-              ;     (multi f24 (tap-hold $tap-time $hold-time-slow ; lmet))
-              c     (multi f24 (tap-hold $tap-time $hold-time      c (layer-toggle cmd)))
-              m     (multi f24 (tap-hold $tap-time $hold-time      m (layer-toggle cmd)))
-              caps  (multi f24 (tap-hold $tap-time $hold-time-slow esc (layer-toggle mouse)))
-              rsft  (multi f24 (tap-hold $tap-time $hold-time-slow esc (layer-toggle mouse)))
-              fst (movemouse-speed 200)
-              slw (movemouse-speed 50)
-              vsl (movemouse-speed 25)
-              c_j (chord apos j)
-              c_k (chord apos k)
-              c_f (chord delete f)
-              c_d (chord delete d)
-            )
-            (defchords apos $chord-time
-              (j  ) @j
-              (  k) @k
-              (j k) esc 
-            )
-            (defchords delete $chord-time
-              (f    ) @f
-              (  d  ) @d
-              (f d  ) '
+            (defvirtualkeys
+              shift (multi (layer-switch main) lsft)
+              clear (multi (layer-switch main) (on-press release-virtualkey shift))
             )
 
-            (defalias
-              ms↑ (movemouse-up 4 4)
-              ms← (movemouse-left 4 4)
-              ms↓ (movemouse-down 4 4)
-              ms→ (movemouse-right 4 4)
-              mwu (mwheel-up 50 120)
-              mwd (mwheel-down 50 120)
+            (defchords mtl 50
+              (w  ) w
+              (  e) e
+              (w e) esc
             )
 
-
-            (deflayer base
-              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
-              tab      q        w        e        r        t        y        u        i        o        p        [        ]        \
-              @caps    @a       @s       @c_d     @c_f     @g       @h       @c_j     @c_k     @l       @;       '        ret
-              lsft     z        x        @c       v        b        n        @m        ,        .       /        @rsft
-              lctl     lmet     lalt                       @spc                        ralt     rmet     rctl
+            (defchords mtr 50
+              (i  ) i
+              (  o) o
+              (i o) bspc
             )
 
-            (deflayer cmd
-              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
-              tab      C-w      C-tab    C-S-tab  r        C-t      y        bspc     up       @del     ret      [        ]        \
-              @caps    a        C-del    C-bspc   f        g        h        left     down     right    ;        '        ret
-              lsft     z        x        c        v        b        lsft     m        ,        .        /        rsft
-              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+            (defchords mbl 50
+              (x  ) (t! charmod x ralt)
+              (  c) c
+              (x c) tab
             )
 
-            (deflayer mouse
-              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
-              tab      q        @fst     @slw     @vsl     t        y        mwu      @ms↑     mwd        p        [        ]        \
-              @caps    a        mrgt     mmid     mlft     g        h        @ms←     @ms↓     @ms→        ;        '        ret
-              lsft     z        x        c        v        b        n        m        ,        .        /        rsft
-              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+            (defchords mbr 50
+              (,  ) ,
+              (  .) (t! charmod . ralt)
+              (, .) ret
             )
 
-            (deflayer sym_1
-              grv      1        2        3        4        5        6        7        8        9        0        -        =        bspc
-              tab      S-1      S-2      S-3      S-4      S-5      S-6      S-7      S-8      S-9      S-0      [        ]        \
-              @caps    `        -        /        S-/      '        h        ;        S-;      [        ]        '        ret
-              lsft     S-`      S--      \        S-\      S-'      lsft     +        =        S-[      S-]      rsft
-              lctl     lmet     lalt                       spc                        ralt     rmet     rctl
+            (deflayermap (main)
+              w (chord mtl w)
+              e (chord mtl e)
+              i (chord mtr i)
+              o (chord mtr o)
+              a (t! charmod a lmet)
+              s (t! charmod s lalt)
+              d (t! charmod d lsft)
+              f (t! charmod f lctl)
+              j (t! charmod j rctl)
+              k (t! charmod k rsft)
+              l (t! charmod l lalt)
+              ; (t! charmod ; rmet)
+              z (t! charmod z lctl) 
+              x (chord mbl x)
+              c (chord mbl c)
+              v (t! charmod v (layer-while-held fumbol))
+              m (t! charmod m (layer-while-held fumbol))
+              , (chord mbr ,)
+              . (chord mbr .)
+              / (t! charmod / rctl)
+              spc (t! charmod spc (multi (layer-switch extend) (on-release tap-virtualkey clear)))
+            )
+
+            (deflayermap (extend)
+              e (layer-switch fumbol)
+              r (on-press press-virtualkey shift)
+              y ins
+              u home
+              i up
+              o end
+              p pgup
+              a lmet
+              s lalt
+              d lsft
+              f lctl
+            ;;g comp ;; Enable if not MacOS.
+              h esc
+              j left
+              k down
+              l rght
+              ; pgdn
+              z mute
+              x vold
+              c volu
+              v pp
+              n tab
+              m bspc
+              , spc
+              . del
+              / ret
+            )
+
+            (defchords ftl 50
+              (w  ) f2
+              (  e) f3
+              (w e) esc
+            )
+
+            (defchords ftr 50
+              (i  ) f8
+              (  o) f9
+              (i o) bspc
+            )
+
+            (defchords fbl 50
+              (x  ) (t! charmod ` ralt)
+              (  c) -
+              (x c) tab
+            )
+
+            (defchords fbr 50
+              (,  ) [
+              (  .) (t! charmod ] ralt)
+              (, .) ret
+            )
+
+            (deflayermap (fumbol)
+              q f1
+              w (chord ftl w)
+              e (chord ftl e)
+              r f4
+              t f5
+              y f6
+              u f7
+              i (chord ftr i)
+              o (chord ftr o)
+              p f10
+              [ f11
+              ] f12
+              \ f13
+              a (t! charmod 1 lmet)
+              s (t! charmod 2 lalt)
+              d (t! charmod 3 lsft)
+              f (t! charmod 4 lctl)
+              g 5
+              h 6
+              j (t! charmod 7 rctl)
+              k (t! charmod 8 rsft)
+              l (t! charmod 9 lalt)
+              ; (t! charmod 0 rmet)
+              z (t! charmod lsgt lctl)
+              x (chord fbl x)
+              c (chord fbl c)
+              v =
+              b f11
+              n f12
+              m '
+              , (chord fbr ,)
+              . (chord fbr .)
+              / (t! charmod \ lctl)
             )
           '';
         };

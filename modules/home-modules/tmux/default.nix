@@ -11,6 +11,9 @@ in
       enable = true;
       baseIndex = 1;
       extraConfig = /*bash*/''
+        set-option -g default-terminal "screen-256color"
+        set-option -g focus-event on
+        set.option -sg escape-time 10
         set -g default-command ${pkgs.zsh}/bin/zsh
         unbind r
         bind r source-file ~/.config/tmux/tmux.conf

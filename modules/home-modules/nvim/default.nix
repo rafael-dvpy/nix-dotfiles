@@ -8,7 +8,7 @@ in
   config = mkIf cfg.enable {
 
     home.file = {
-      ".config/nvim" = {
+      ".config/nvim/" = {
         source = config.lib.file.mkOutOfStoreSymlink ./nvim-config;
       };
     };

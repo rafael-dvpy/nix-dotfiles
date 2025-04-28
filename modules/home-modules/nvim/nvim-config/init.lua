@@ -475,12 +475,8 @@ require('lazy').setup({
       },
     },
   },
-{
-  "max397574/better-escape.nvim",
-  config = function()
-    require("better_escape").setup()
-  end,
-},  {
+
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -722,6 +718,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettier',
+        'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

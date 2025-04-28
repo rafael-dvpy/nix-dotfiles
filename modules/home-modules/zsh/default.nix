@@ -21,7 +21,7 @@ in
       syntaxHighlighting.enable = true;
 
       # .zshrc
-      initExtra = ''
+      initContent = ''
         PROMPT="%F{blue}%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
 
         export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store";
