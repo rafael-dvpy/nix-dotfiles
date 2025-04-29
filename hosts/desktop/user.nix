@@ -16,7 +16,7 @@
 
     # cli
     ghostty.enable = true;
-    foot.enable = false;
+    foot.enable = true;
     nvim.enable = true;
     scripts.enable = true;
     zsh.enable = true;

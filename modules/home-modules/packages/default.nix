@@ -10,6 +10,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       vesktop
+      zathura
       stremio
       neofetch
       ripgrep

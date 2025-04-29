@@ -36,6 +36,12 @@
           devices = [
             # Replace the paths below with the appropriate device paths for your setup.
             # Use `ls /dev/input/by-path/` to find your keyboard devices.
+            "/dev/input/by-path/pci-0000:00:14.0-usb-0:2:1.0-event-kbd"
+            "/dev/input/by-path/pci-0000:00:14.0-usb-0:2:1.1-event-kbd"
+            "/dev/input/by-path/pci-0000:00:14.0-usbv2-0:2:1.0-event-kbd"
+            "/dev/input/by-path/pci-0000:00:14.0-usbv2-0:2:1.1-event-kbd"
+            "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+            "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
             "/dev/input/by-path/pci-0000:01:00.0-usb-0:1:1.1-event-kbd"
             "/dev/input/by-path/pci-0000:01:00.0-usb-0:5:1.0-event-kbd"
             "/dev/input/by-path/pci-0000:01:00.0-usbv2-0:1:1.1-event-kbd"
@@ -119,7 +125,25 @@
               spc (t! charmod spc (multi (layer-switch extend) (on-release tap-virtualkey clear)))
             )
 
+            (deflayermap (mouse)
+              w (movemouse-speed 25)
+              e (movemouse-speed 50)
+              r (movemouse-speed 200)
+              s mrgt
+              d mmid
+              f mlft
+              p (mwheel-up 50 120)
+              ; (mwheel-down 50 120)
+              u (mwheel-left 50 120)
+              o (mwheel-right 50 120)
+              i (movemouse-up 4 4)
+              j (movemouse-left 4 4)
+              k (movemouse-down 4 4)
+              l (movemouse-right 4 4)
+            )
+
             (deflayermap (extend)
+              w (layer-switch mouse)
               e (layer-switch fumbol)
               r (on-press press-virtualkey shift)
               y ins
