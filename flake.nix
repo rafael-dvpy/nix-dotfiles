@@ -31,6 +31,30 @@
         ];
       };
 
+      nixosConfigurations.nord = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs system; };
+        modules = [
+          { networking.hostName = "nord"; }
+
+          ./modules/config-modules/default.nix
+          ./hosts/desktop/hardware-configuration.nix
+          home-manager.nixosModules.home-manager
+          ({ config, ... }: {
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              extraSpecialArgs = {
+                inherit inputs;
+                inherit system;
+                inherit (config.networking) hostName;
+              };
+              # Home manager config (configures programs like firefox, zsh, eww, etc)
+              users.rafael = (./hosts/desktop/user.nix);
+            };
+          })
+        ];
+      };
+
       nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs system; };
         modules = [
