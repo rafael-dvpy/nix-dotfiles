@@ -37,7 +37,7 @@
           { networking.hostName = "nord"; }
 
           ./modules/config-modules/default.nix
-          ./hosts/desktop/hardware-configuration.nix
+          ./hosts/nord/hardware-configuration.nix
           home-manager.nixosModules.home-manager
           ({ config, ... }: {
             home-manager = {
@@ -49,7 +49,7 @@
                 inherit (config.networking) hostName;
               };
               # Home manager config (configures programs like firefox, zsh, eww, etc)
-              users.rafael = (./hosts/desktop/user.nix);
+              users.rafael = (./hosts/nord/user.nix);
             };
           })
         ];
