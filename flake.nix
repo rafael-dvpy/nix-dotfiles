@@ -27,7 +27,7 @@
               homeDirectory = "/home/rafael";
             };
           }
-          ./hosts/desktop/user.nix
+          ./hosts/tokyo/user.nix
         ];
       };
 
@@ -55,13 +55,13 @@
         ];
       };
 
-      nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.tokyo = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs system; };
         modules = [
-          { networking.hostName = "desktop"; }
+          { networking.hostName = "tokyo"; }
 
           ./modules/config-modules/default.nix
-          ./hosts/desktop/hardware-configuration.nix
+          ./hosts/tokyo/hardware-configuration.nix
           home-manager.nixosModules.home-manager
           ({ config, ... }: {
             home-manager = {
@@ -73,7 +73,7 @@
                 inherit (config.networking) hostName;
               };
               # Home manager config (configures programs like firefox, zsh, eww, etc)
-              users.rafael = (./hosts/desktop/user.nix);
+              users.rafael = (./hosts/tokyo/user.nix);
             };
           })
         ];
@@ -90,8 +90,13 @@
             buildInputs = with pkgs; [
               neovim
               rustc
+              rust-analyzer
               cargo
               libgcc
+              lua5_1
+              luarocks
+              nodejs
+              lua-language-server
             ];
           };
 

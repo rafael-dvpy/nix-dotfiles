@@ -28,6 +28,7 @@ in
       bat
       unzip
       lowdown
+      lua-language-server
       zk
       grim
       slurp

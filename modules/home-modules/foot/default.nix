@@ -11,30 +11,38 @@ in
       enable = true;
       settings = {
         main = {
-          font = "JetBrainsMono Nerd Font:size=10";
+          font = "JetBrainsMono Nerd Font:size=9";
           pad = "12x12";
         };
         colors = {
-          foreground = "d9e0ee";
-          background = "292a37";
-          ## Normal/regular colors (color palette 0-7)
-          regular0 = "303241"; # black
-          regular1 = "ec6a88";
-          regular2 = "3fdaa4";
-          regular3 = "efb993";
-          regular4 = "3fc6de";
-          regular5 = "b771dc";
-          regular6 = "6be6e6";
-          regular7 = "d9e0ee";
+          foreground = "c0caf5";
+          background = "24283b";
+          selection-foreground = "24283b";
+          selection-background = "7aa2f7";
 
-          bright0 = "393a4d"; # bright black
-          bright1 = "e95678"; # bright red
-          bright2 = "29d398"; # bright green
-          bright3 = "efb993"; # bright yellow
-          bright4 = "26bbd9";
-          bright5 = "b072d1"; # bright magenta
-          bright6 = "59e3e3"; # bright cyan
-          bright7 = "d9e0ee"; # bright white
+          ## Normal colors
+          regular0 = "414868"; # black (terminal_black)
+          regular1 = "f7768e"; # red
+          regular2 = "9ece6a"; # green
+          regular3 = "e0af68"; # yellow
+          regular4 = "7aa2f7"; # blue
+          regular5 = "bb9af7"; # magenta
+          regular6 = "7dcfff"; # cyan
+          regular7 = "a9b1d6"; # white (fg_dark)
+
+          ## Bright colors
+          bright0 = "3b4261"; # bright black (fg_gutter)
+          bright1 = "db4b4b"; # bright red
+          bright2 = "73daca"; # bright green
+          bright3 = "ff9e64"; # bright yellow (orange)
+          bright4 = "2ac3de"; # bright blue (blue1)
+          bright5 = "ff007c"; # bright magenta (magenta2)
+          bright6 = "b4f9f8"; # bright cyan (blue6)
+          bright7 = "c0caf5"; # bright white (fg)
+
+          ## Optional dimmed colors (foot supports up to 16)
+          dim0 = "ff9e64";
+          dim1 = "db4b4b";
         };
       };
     };
