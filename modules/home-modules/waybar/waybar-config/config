@@ -1,23 +1,13 @@
 {
-    "position": "bottom", 
-    "height": 30,
+    "position": "top", 
+    //"height": 30,
     "modules-left": ["hyprland/workspaces"],
     "modules-right": ["network", "pulseaudio", "battery", "custom/date", "clock", "custom/power"],
     // Modules configuration
 "hyprland/workspaces": {
-	"format": "{name}: {icon}",
-	"format-icons": {
-		"1": "",
-		"2": "",
-		"3": "",
-		"4": "",
-		"5": "",
-		"active": "",
-		"default": ""
-	},
+	"format": "{name}",
        "persistent-workspaces": {
-             "*": 5, // 5 workspaces by default on every monitor
-       }
+       },
 }
      },
 	"custom/date": {

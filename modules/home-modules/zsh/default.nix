@@ -67,7 +67,7 @@ in
         tree = "exa --tree --icons";
         v = "nvim";
         nd = "() {nix develop $HOME/.config/home-manager#$1 -c zsh; echo 'You entered the $1 dev shell\!'}";
-        rebuild = "sudo nixos-rebuild switch --flake $HOME/.config/home-manager ; notify-send 'Rebuild complete\!'";
+        rebuild = "sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} ; notify-send 'Rebuild complete\!'";
       };
 
       # Source all plugins, nix-style
