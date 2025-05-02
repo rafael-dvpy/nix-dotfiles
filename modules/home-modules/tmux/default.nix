@@ -13,7 +13,7 @@ in
       extraConfig = /*bash*/''
         set-option -g default-terminal "screen-256color"
         set-option -g focus-event on
-        set.option -sg escape-time 10
+        set-option -sg escape-time 10
         set -g default-command ${pkgs.zsh}/bin/zsh
         unbind r
         bind r source-file ~/.config/tmux/tmux.conf
@@ -27,19 +27,6 @@ in
         bind-key j select-pane -D
         bind-key k select-pane -U
         bind-key l select-pane -R
-
-        # List of plugins
-        set -g @plugin 'tmux-plugins/tpm'
-        set -g @plugin 'fabioluciano/tmux-tokyo-night'
-
-        ### Tokyo Night Theme configuration
-        set -g @theme_variation 'moon'
-        set -g @theme_left_separator ''
-        set -g @theme_right_separator ''
-        set -g @theme_plugins 'datetime,weather,playerctl,yay'
-
-        # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-        run '~/.tmux/plugins/tpm/tpm'
       '';
     };
 
