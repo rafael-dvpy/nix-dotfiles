@@ -15,13 +15,13 @@
 
     programs.noisetorch.enable = true;
     # Enables Audio
-    services.pulseaudio.enable = false;
+    services.pulseaudio.enable = true;
     security.rtkit.enable = true;
     services.pipewire = {
-      enable = true;
+    enable = false;
       alsa.enable = true;
       alsa.support32Bit = true;
-      pulse.enable = true;
+      #pulse.enable = true;
       #jack.enable = true;
 
       # use the example session manager (no others are packaged yet so this is enabled by default,

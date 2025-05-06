@@ -23,7 +23,7 @@ window#waybar {
 	color: #c0caf5;
 }
 
-#workspaces button.focused {
+#workspaces button.active {
 	color: #24283b;
 	background-color: #7aa2f7;
 }

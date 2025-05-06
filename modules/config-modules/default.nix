@@ -19,6 +19,9 @@
   greetd.enable = true;
   remaps.enable = true;
 
+  services.devmon.enable = true;
+  services.gvfs.enable = true; 
+  services.udisks2.enable = true;
   environment.defaultPackages = [ ];
   services.xserver.desktopManager.xterm.enable = false;
   programs.zsh.enable = true;
@@ -29,6 +32,8 @@
     haskellPackages.alsa-mixer
     acpi
     tlp
+    gvfs
+    udiskie
     git
   ];
 
@@ -90,7 +95,7 @@
   users.users.rafael = {
     isNormalUser = true;
     description = "Rafael Oliveira";
-    extraGroups = [ "uinput" "docker" "networkmanager" "wheel" ];
+    extraGroups = ["disk" "uinput" "docker" "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       #  thunderbir
@@ -99,7 +104,7 @@
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "24.11"; # Did you read the comment?
 

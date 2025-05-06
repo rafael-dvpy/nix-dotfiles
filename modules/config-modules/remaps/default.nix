@@ -151,20 +151,21 @@
               i up
               o end
               p pgup
-              a lmet
-              s lalt
-              d lsft
-              f lctl
-            ;;g comp ;; Enable if not MacOS.
+              a A-1
+              s A-2
+              d A-3
+              f A-4
+              g A-5
               h esc
               j left
               k down
               l rght
               ; pgdn
-              z mute
-              x vold
-              c volu
-              v pp
+              z A-S-1
+              x A-S-2
+              c A-S-3
+              v A-S-4
+              b A-S-5
               n tab
               m bspc
               , spc
