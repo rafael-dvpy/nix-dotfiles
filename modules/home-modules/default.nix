@@ -7,7 +7,6 @@
     ./hyprland
     ./waybar
     ./dunst
-    ./wofi
     ./zen
     ./gtk
 

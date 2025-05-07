@@ -10,7 +10,6 @@
     hyprland.enable = true;
     waybar.enable = true;
     dunst.enable = true;
-    wofi.enable = true;
     zen.enable = true;
     gtk.enable = true;
 

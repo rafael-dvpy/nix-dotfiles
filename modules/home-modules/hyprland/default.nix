@@ -9,11 +9,21 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       wofi
-      swaybg
       wlsunset
       wl-clipboard
       hyprland
       grim
+      slurp
+      waybar
+      dunst
+      foot
+      kdePackages.dolphin
+      playerctl
+      brightnessctl
+      noisetorch
+      swaybg
+      networkmanagerapplet
+      pavucontrol
     ];
 
     programs.hyprlock = {
@@ -52,12 +62,23 @@ in
       };
     };
 
-    # Optional, hint Electron apps to use Wayland:
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
     home.file = {
       ".config/hypr/hyprland.conf" = {
         source = ./hyprland.conf;
+      };
+      ".config/home-manager/pics/tokyonight-wallpaper.png" = {
+        source = ./tokyonight-wallpaper.png;
+      };
+      ".config/wofi.css" = {
+        source = ./wofi.css;
+      };
+      "stuff/captures/.keep" = {
+        text = "";
+      };
+      "stuff/notes/.keep" = {
+        text = "";
       };
     };
   };
