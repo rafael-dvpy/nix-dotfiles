@@ -21,19 +21,7 @@ in
     home.packages = with pkgs; [
       font-awesome # For icons
       playerctl # For Waybar modules
-      curl # For weather script
-      polkit_gnome # For systemctl permissions in waybar-power.sh
+      polkit_gnome # For systemctl permissions
     ];
-
-    home.file = {
-      "bin/waybar-power.sh" = {
-        source = "${configDir}/scripts/waybar-power.sh";
-        executable = true;
-      };
-      "bin/waybar-weather.sh" = {
-        source = "${configDir}/scripts/waybar-weather.sh";
-        executable = true;
-      };
-    };
   };
 }

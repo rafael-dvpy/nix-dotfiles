@@ -5,7 +5,7 @@
   "spacing": 4,
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["network", "pulseaudio", "battery", "custom/weather", "custom/power", "tray"],
+  "modules-right": ["network", "pulseaudio", "battery", "custom/power", "tray"],
   "hyprland/workspaces": {
     "format": "{name}",
     "on-click": "activate",
@@ -61,16 +61,9 @@
     "format-full": "󱈑 {capacity}%",
     "format-icons": ["󱊡", "󱊢", "󱊣"]
   },
-  "custom/weather": {
-    "format": "🌡️ {}",
-    "interval": 1800,
-    "exec": "$HOME/bin/waybar-weather.sh",
-    "return-type": "string",
-    "tooltip": true
-  },
   "custom/power": {
     "format": "󰐥",
-    "on-click": "$HOME/bin/waybar-power.sh",
+    "on-click": "eww open power-menu",
     "return-type": "string",
     "tooltip": "Open power menu"
   },

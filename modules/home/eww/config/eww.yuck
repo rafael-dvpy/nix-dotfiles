@@ -1,0 +1,20 @@
+(defwindow power-menu
+  :monitor 0
+  :geometry (geometry :x "50%" :y "50%" :width "200px" :height "200px" :anchor "center")
+  :stacking "fg"
+  :windowtype "dock"
+  (box :class "power-menu" :orientation "v" :space-evenly false
+    (button :onclick "eww close power-menu && $HOME/.config/eww/scripts/eww-power.sh poweroff" "Poweroff")
+    (button :onclick "eww close power-menu && $HOME/.config/eww/scripts/eww-power.sh reboot" "Reboot")
+    (button :onclick "eww close power-menu && $HOME/.config/eww/scripts/eww-power.sh suspend" "Suspend")
+    (button :onclick "eww close power-menu && $HOME/.config/eww/scripts/eww-power.sh logout" "Logout")
+  ))
+
+(defwindow weather-widget
+  :monitor 0
+  :geometry (geometry :x "10px" :y "40px" :width "150px" :height "50px" :anchor "top-left")
+  :stacking "fg"
+  :windowtype "dock"
+  (box :class "weather-widget" :orientation "h" :space-evenly false
+    (label :text "$(sh $HOME/.config/eww/scripts/eww-weather.sh)" :class "weather-text")
+  ))

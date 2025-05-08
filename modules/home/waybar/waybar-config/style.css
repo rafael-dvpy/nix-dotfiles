@@ -17,7 +17,7 @@ window#waybar.hidden {
   opacity: 0.3;
 }
 
-#workspaces, #clock, #network, #pulseaudio, #battery, #custom-weather, #custom-power, #tray {
+#workspaces, #clock, #network, #pulseaudio, #battery, #custom-power, #tray {
   background: #24283b;
   margin: 4px 2px;
   padding: 0 8px;
@@ -55,11 +55,6 @@ window#waybar.hidden {
 #battery.critical:not(.charging) {
   color: #f7768e;
   animation: blink 1s infinite;
-}
-
-#custom-weather {
-  color: #9ece6a;
-  padding: 0 10px;
 }
 
 #custom-power {
