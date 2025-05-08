@@ -4,23 +4,20 @@ with lib;
 let
   cfg = config.modules.hyprland;
   configDir = ./config;
-in {
+in
+{
   options.modules.hyprland = { enable = mkEnableOption "Hyprland window manager"; };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      hyprland
       wlsunset
       wl-clipboard
       grim
       slurp
       kdePackages.dolphin
-      playerctl
       brightnessctl
       noisetorch
       swaybg
-      networkmanagerapplet
-      pavucontrol
     ];
 
     programs.hyprlock = {

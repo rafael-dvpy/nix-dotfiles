@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-wofi --show run --style=$HOME/.config/wofi.css --term=foot --prompt="Power Menu" -e "Poweroff:Reboot:Suspend:Logout" | {
-  read -r cmd
-  case "$cmd" in
-    Poweroff) systemctl poweroff ;;
-    Reboot) systemctl reboot ;;
-    Suspend) systemctl suspend ;;
-    Logout) hyprctl dispatch exit ;;
-  esac
-}
+# Display a power menu using wofi and execute the selected action
+options="Poweroff\nReboot\nSuspend\nLogout"
+choice=$(echo -e "$options" | wofi --show dmenu --style=$HOME/.config/wofi.css --term=foot --prompt="Power Menu")
+case "$choice" in
+  Poweroff) systemctl poweroff ;;
+  Reboot) systemctl reboot ;;
+  Suspend) systemctl suspend ;;
+  Logout) hyprctl dispatch exit ;;
+  *) exit 1 ;;
+esac

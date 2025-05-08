@@ -71,7 +71,8 @@
   "custom/power": {
     "format": "󰐥",
     "on-click": "$HOME/bin/waybar-power.sh",
-    "return-type": "string"
+    "return-type": "string",
+    "tooltip": "Open power menu"
   },
   "tray": {
     "icon-size": 16,

@@ -156,6 +156,8 @@
               d A-3
               f A-4
               g A-5
+              t A-t
+              q A-S-t
               h esc
               j left
               k down

@@ -4,7 +4,8 @@ with lib;
 let
   cfg = config.modules.waybar;
   configDir = ./waybar-config;
-in {
+in
+{
   options.modules.waybar = { enable = mkEnableOption "Waybar status bar"; };
 
   config = mkIf cfg.enable {
@@ -21,13 +22,10 @@ in {
       font-awesome # For icons
       playerctl # For Waybar modules
       curl # For weather script
+      polkit_gnome # For systemctl permissions in waybar-power.sh
     ];
 
     home.file = {
-      "bin/waybar-date.sh" = {
-        source = "${configDir}/scripts/waybar-date.sh";
-        executable = true;
-      };
       "bin/waybar-power.sh" = {
         source = "${configDir}/scripts/waybar-power.sh";
         executable = true;
