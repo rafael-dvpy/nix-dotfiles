@@ -34,3 +34,16 @@
 .weather-text {
   color: #9ece6a;
 }
+
+.close-button {
+  color: #f7768e;
+  background-color: #1a1b26;
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-left: 5px;
+}
+
+.close-button:hover {
+  background-color: #f7768e;
+  color: #1a1b26;
+}

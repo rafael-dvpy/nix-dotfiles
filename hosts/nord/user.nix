@@ -17,6 +17,7 @@
     ../../modules/home/tmux/default.nix
     ../../modules/home/packages/default.nix
     ../../modules/home/wofi/default.nix
+    ../../modules/home/eww/default.nix
   ];
 
   home = {
@@ -41,5 +42,6 @@
     tmux.enable = true;
     packages.enable = true;
     wofi.enable = true;
+    eww.enable = true;
   };
 }
