@@ -1,122 +1,107 @@
 {
-  description = "Home Manager configuration of rafael";
+  description = "Rafael's NixOS and Home Manager configurations";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      homeConfigurations."rafael" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          {
-            home = {
-              username = "rafael";
-              homeDirectory = "/home/rafael";
-            };
-          }
-          ./hosts/tokyo/user.nix
-        ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+      pkgsFor = forAllSystems (system: nixpkgs.legacyPackages.${system});
+
+      commonHomeManager = { system, hostname, userConfig }: {
+        useUserPackages = true;
+        useGlobalPkgs = true;
+        extraSpecialArgs = { 
+          inherit inputs system hostname;
+          hostName = hostname; # Backward compatibility
+        };
+        users.rafael = userConfig;
       };
 
-      nixosConfigurations.nord = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs system; };
-        modules = [
-          { networking.hostName = "nord"; }
-
-          ./modules/config-modules/default.nix
-          ./hosts/nord/hardware-configuration.nix
-          home-manager.nixosModules.home-manager
-          ({ config, ... }: {
-            home-manager = {
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              extraSpecialArgs = {
-                inherit inputs;
-                inherit system;
-                inherit (config.networking) hostName;
-              };
-              # Home manager config (configures programs like firefox, zsh, eww, etc)
-              users.rafael = (./hosts/nord/user.nix);
-            };
-          })
-        ];
-      };
-
-      nixosConfigurations.tokyo = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs system; };
-        modules = [
-          { networking.hostName = "tokyo"; }
-
-          ./modules/config-modules/default.nix
-          ./hosts/tokyo/hardware-configuration.nix
-          home-manager.nixosModules.home-manager
-          ({ config, ... }: {
-            home-manager = {
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              extraSpecialArgs = {
-                inherit inputs;
-                inherit system;
-                inherit (config.networking) hostName;
-              };
-              # Home manager config (configures programs like firefox, zsh, eww, etc)
-              users.rafael = (./hosts/tokyo/user.nix);
-            };
-          })
-        ];
-      };
-
-
-      devShells.${system} = {
-
-        default = pkgs.mkShell
-          {
-            shellHook = ''
-              zsh
-            '';
-            buildInputs = with pkgs; [
-              neovim
-              rustc
-              rust-analyzer
-              cargo
-              libgcc
-              lua5_1
-              luarocks
-              nodejs
-              lua-language-server
-            ];
+      mkNixosConfig = { system, hostname, hardwareConfig, userConfig }: 
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { 
+            inherit inputs system hostname;
+            hostName = hostname; # Backward compatibility
           };
+          modules = [
+            { networking.hostName = hostname; }
+            ./modules/config-modules/default.nix
+            hardwareConfig
+            home-manager.nixosModules.home-manager
+            { home-manager = commonHomeManager { inherit system hostname userConfig; }; }
+          ];
+        };
 
+      mkHomeConfig = { system, username, homeDir, userConfig }:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgsFor.${system};
+          modules = [
+            {
+              home = {
+                inherit username homeDir;
+              };
+            }
+            userConfig
+          ];
+        };
 
-        node = pkgs.mkShell
-          {
-            shellHook = ''
-              zsh
-            '';
-            buildInputs = with pkgs; [
-              neovim
-              nodejs
-              rustc
-              cargo
-              libgcc
-            ];
-          };
-
+      commonDevShell = pkgs: {
+        default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            neovim
+            rustc
+            rust-analyzer
+            cargo
+            libgcc
+            lua5_1
+            luarocks
+            nodejs
+            lua-language-server
+          ];
+        };
+        node = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            neovim
+            nodejs
+            rustc
+            cargo
+            libgcc
+          ];
+        };
       };
 
+    in {
+      homeConfigurations.rafael = mkHomeConfig {
+        system = "x86_64-linux";
+        username = "rafael";
+        homeDir = "/home/rafael";
+        userConfig = ./hosts/tokyo/user.nix;
+      };
+
+      nixosConfigurations = {
+        nord = mkNixosConfig {
+          system = "x86_64-linux";
+          hostname = "nord";
+          hardwareConfig = ./hosts/nord/hardware-configuration.nix;
+          userConfig = ./hosts/nord/user.nix;
+        };
+        tokyo = mkNixosConfig {
+          system = "x86_64-linux";
+          hostname = "tokyo";
+          hardwareConfig = ./hosts/tokyo/hardware-configuration.nix;
+          userConfig = ./hosts/tokyo/user.nix;
+        };
+      };
+
+      devShells = forAllSystems (system: commonDevShell pkgsFor.${system});
     };
 }
-
