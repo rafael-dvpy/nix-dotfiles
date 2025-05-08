@@ -18,14 +18,6 @@ let
     rev = "909f0b8879481eab93741fa284a7d1d13cf6f79e";
     sha256 = "1z80816f9nnix79vcd8a5b5nr8kzislld789xy5sr4yqs7hy90j4";
   };
-
-  # Fetch fzf for shell integration
-  fzf-shell = pkgs.fetchFromGitHub {
-    owner = "junegunn";
-    repo = "fzf";
-    rev = "0.55.0";
-    sha256 = "0a9f3v37k8m6v9w7s8z4r7z9v3k8j7z6v9w7s8z4r7z9v3k8j7z";
-  };
 in
 {
   options.modules.zsh = { enable = mkEnableOption "zsh"; };
@@ -39,8 +31,13 @@ in
       upower # For battery status
     ];
 
-    # Remove ~/.fzf.zsh to avoid sourcing errors
-    home.file.".fzf.zsh".force = true;
+    # Provide fzf key-bindings.zsh
+    home.file.".fzf/shell/key-bindings.zsh" = {
+      source = pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/key-bindings.zsh";
+        sha256 = "1j0b3bgawr14aqp7qp7a3wmrm822ynqkrbbrvslrbpyscca89r1g";
+      };
+    };
 
     programs.zsh = {
       enable = true;
@@ -75,7 +72,7 @@ in
         export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --color=bg+:#24283b,fg+:#c0caf5,pointer:#7aa2f7,hl:#f7768e"
 
         # Source fzf key-bindings
-        source "${fzf-shell}/shell/key-bindings.zsh"
+        [ -f "$HOME/.fzf/shell/key-bindings.zsh" ] && source "$HOME/.fzf/shell/key-bindings.zsh"
 
         # Keybindings
         bindkey '^ ' autosuggest-accept
