@@ -6,36 +6,69 @@ in
   options.modules.zsh = { enable = mkEnableOption "zsh"; };
 
   config = mkIf cfg.enable {
-    home.packages = [
-      pkgs.zsh
+    home.packages = with pkgs; [
+      zsh
+      starship # Prompt
+      fzf # Fuzzy finder
+      jq # For nixdevs function
+      upower # For battery status
+      curl # For plugin download script
     ];
+
+    # Setup script to download plugins
+    home.file.".config/zsh/setup-plugins.sh" = {
+      text = ''
+        #!/bin/sh
+        mkdir -p $HOME/.config/zsh/plugins/auto-ls
+        mkdir -p $HOME/.config/zsh/plugins/fzf-zsh-plugin
+        curl -s -o $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh \
+          https://raw.githubusercontent.com/notusknot/auto-ls/62a176120b9deb81a8efec992d8d6ed99c2bd1a1/auto-ls.zsh
+        curl -s -o $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh \
+          https://raw.githubusercontent.com/unixorn/fzf-zsh-plugin/v1.1.0/fzf-zsh-plugin.plugin.zsh
+      '';
+      executable = true;
+    };
 
     programs.zsh = {
       enable = true;
-
-      # directory to put config files in
       dotDir = ".config/zsh";
-
       enableCompletion = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
+      autosuggestion.enable = true; # Provided by nixpkgs zsh-autosuggestions
+      syntaxHighlighting.enable = true; # Provided by nixpkgs zsh-syntax-highlighting
 
-      # .zshrc
       initContent = ''
-        PROMPT="%F{blue}%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
+        # Starship prompt
+        eval "$(starship init zsh)"
 
-        export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store";
-        export ZK_NOTEBOOK_DIR="~/stuff/notes";
-        export DIRENV_LOG_FORMAT="";
+        # Environment variables
+        export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+        export ZK_NOTEBOOK_DIR="$HOME/stuff/notes"
+        export DIRENV_LOG_FORMAT=""
+        export EDITOR="nvim"
+        export VISUAL="nvim"
+        export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --color=bg+:#24283b,fg+:#c0caf5,pointer:#7aa2f7,hl:#f7768e"
+
+        # Source plugins if they exist
+        [ -f $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh ] && source $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh
+        [ -f $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh ] && source $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh
+
+        # Keybindings
         bindkey '^ ' autosuggest-accept
-        bindkey -s ^f "tmux-sessionizer\n"
+        bindkey -s '^f' 'tmux-sessionizer\n'
+        bindkey '^r' fzf-history-widget # Ctrl+R for history search
+        bindkey '^t' fzf-file-widget    # Ctrl+T for file search
 
+        # Functions
         edir() { tar -cz $1 | age -p > $1.tar.gz.age && rm -rf $1 &>/dev/null && echo "$1 encrypted" }
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
+        note() { nvim "$ZK_NOTEBOOK_DIR/$(fzf --preview 'bat --style=plain --color=always {}' --query \"$1\")" }
+        nixgc() { nix-collect-garbage -d && notify-send "Nix garbage collection complete!" }
+        nixdevs() { nix flake show $HOME/.config/home-manager --json | jq '.devShells."x86_64-linux" | keys' }
+
+        # Direnv hook
+        eval "$(direnv hook zsh)"
       '';
 
-      # basically aliases for directories: 
-      # `cd ~dots` will cd into ~/.config/nixos
       dirHashes = {
         dots = "$HOME/.config/home-manager";
         stuff = "$HOME/stuff";
@@ -43,14 +76,12 @@ in
         junk = "$HOME/stuff/other";
       };
 
-      # Tweak settings for history
       history = {
-        save = 1000;
-        size = 1000;
+        save = 10000;
+        size = 10000;
         path = "$HOME/.cache/zsh_history";
       };
 
-      # Set some aliases
       shellAliases = {
         c = "clear";
         mkdir = "mkdir -vp";
@@ -66,22 +97,113 @@ in
         ld = "lazydocker";
         tree = "exa --tree --icons";
         v = "nvim";
-        nd = "() {nix develop $HOME/.config/home-manager#$1 -c zsh; echo 'You entered the $1 dev shell\!'}";
-        rebuild = "sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} ; notify-send 'Rebuild complete\!'";
+        nd = ''() { nix develop $HOME/.config/home-manager#$1 -c zsh; echo "You entered the $1 dev shell!" }'';
+        rebuild = ''sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} ; notify-send "Rebuild complete!"'';
+        setup-zsh-plugins = ''$HOME/.config/zsh/setup-plugins.sh ; notify-send "Zsh plugins installed!"'';
+        # Git aliases
+        gst = "git status";
+        gco = "git checkout";
+        gcm = "git commit -m";
+        gpl = "git pull";
+        gps = "git push";
+        # Nix aliases
+        nsh = "nix-shell";
+        ncl = "nix-collect-garbage";
+        nup = "nix flake update $HOME/.config/home-manager";
+        # Tmux aliases
+        tma = "tmux attach -t";
+        tmk = "tmux kill-session -t";
       };
+    };
 
-      # Source all plugins, nix-style
-      plugins = [
-        {
-          name = "auto-ls";
-          src = pkgs.fetchFromGitHub {
-            owner = "notusknot";
-            repo = "auto-ls";
-            rev = "62a176120b9deb81a8efec992d8d6ed99c2bd1a1";
-            sha256 = "08wgs3sj7hy30x03m8j6lxns8r2kpjahb9wr0s0zyzrmr4xwccj0";
-          };
-        }
-      ];
+    # Enable direnv for per-project environments
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    # Starship configuration
+    programs.starship = {
+      enable = true;
+      settings = {
+        add_newline = true;
+        format = lib.concatStrings [
+          "$username"
+          "$hostname"
+          "$directory"
+          "$git_branch"
+          "$git_status"
+          "$nix_shell"
+          "$cmd_duration"
+          "$battery"
+          "$custom"
+          "\n$character"
+        ];
+        username = {
+          style_user = "bold #c0caf5";
+          style_root = "bold #f7768e";
+          format = "[$user]($style)@";
+          show_always = false;
+        };
+        hostname = {
+          ssh_only = true;
+          style = "bold #7aa2f7";
+          format = "[$hostname]($style):";
+        };
+        directory = {
+          style = "bold #7aa2f7";
+          truncate_to_repo = true;
+          truncation_length = 3;
+          format = "[$path]($style) ";
+        };
+        git_branch = {
+          style = "bold #9ece6a";
+          format = "[$symbol$branch]($style) ";
+          symbol = " ";
+        };
+        git_status = {
+          style = "bold #f7768e";
+          format = "[$all_status$ahead_behind]($style) ";
+        };
+        nix_shell = {
+          style = "bold #86b9d6";
+          format = "[\\($name\\)]($style) ";
+          symbol = "❄️ ";
+        };
+        cmd_duration = {
+          style = "bold #f1fa8c";
+          format = "[$duration]($style) ";
+          min_time = 2000;
+        };
+        battery = {
+          disabled = false;
+          style = "bold #f7768e";
+          format = "[$symbol$percentage]($style) ";
+          full_symbol = "🔋 ";
+          charging_symbol = "⚡️ ";
+          discharging_symbol = "🔋 ";
+          display = [
+            {
+              threshold = 100;
+              style = "bold #a6e3a1";
+            }
+            {
+              threshold = 30;
+              style = "bold #f7768e";
+            }
+          ];
+        };
+        custom.vim = {
+          when = "test -n \"$NVIM\"";
+          command = "echo ''";
+          format = "[$output]($style)";
+          style = "bold #a6e3a1";
+        };
+        character = {
+          success_symbol = "[λ](bold #a6e3a1)";
+          error_symbol = "[?](bold #f7768e)";
+        };
+      };
     };
   };
 }
