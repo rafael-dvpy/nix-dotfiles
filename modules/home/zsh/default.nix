@@ -1,6 +1,31 @@
 { hostName, pkgs, lib, config, ... }:
 with lib;
-let cfg = config.modules.zsh;
+let
+  cfg = config.modules.zsh;
+
+  # Fetch auto-ls plugin
+  auto-ls = pkgs.fetchFromGitHub {
+    owner = "notusknot";
+    repo = "auto-ls";
+    rev = "62a176120b9deb81a8efec992d8d6ed99c2bd1a1";
+    sha256 = "08wgs3sj7hy30x03m8j6lxns8r2kpjahb9wr0s0zyzrmr4xwccj0";
+  };
+
+  # Fetch fzf-zsh-plugin
+  fzf-zsh-plugin = pkgs.fetchFromGitHub {
+    owner = "unixorn";
+    repo = "fzf-zsh-plugin";
+    rev = "909f0b8879481eab93741fa284a7d1d13cf6f79e";
+    sha256 = "1z80816f9nnix79vcd8a5b5nr8kzislld789xy5sr4yqs7hy90j4";
+  };
+
+  # Fetch fzf for shell integration
+  fzf-shell = pkgs.fetchFromGitHub {
+    owner = "junegunn";
+    repo = "fzf";
+    rev = "0.55.0";
+    sha256 = "0a9f3v37k8m6v9w7s8z4r7z9v3k8j7z6v9w7s8z4r7z9v3k8j7z";
+  };
 in
 {
   options.modules.zsh = { enable = mkEnableOption "zsh"; };
@@ -12,22 +37,10 @@ in
       fzf # Fuzzy finder
       jq # For nixdevs function
       upower # For battery status
-      curl # For plugin download script
     ];
 
-    # Setup script to download plugins
-    home.file.".config/zsh/setup-plugins.sh" = {
-      text = ''
-        #!/bin/sh
-        mkdir -p $HOME/.config/zsh/plugins/auto-ls
-        mkdir -p $HOME/.config/zsh/plugins/fzf-zsh-plugin
-        curl -s -o $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh \
-          https://raw.githubusercontent.com/notusknot/auto-ls/62a176120b9deb81a8efec992d8d6ed99c2bd1a1/auto-ls.zsh
-        curl -s -o $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh \
-          https://raw.githubusercontent.com/unixorn/fzf-zsh-plugin/v1.1.0/fzf-zsh-plugin.plugin.zsh
-      '';
-      executable = true;
-    };
+    # Remove ~/.fzf.zsh to avoid sourcing errors
+    home.file.".fzf.zsh".force = true;
 
     programs.zsh = {
       enable = true;
@@ -35,6 +48,19 @@ in
       enableCompletion = true;
       autosuggestion.enable = true; # Provided by nixpkgs zsh-autosuggestions
       syntaxHighlighting.enable = true; # Provided by nixpkgs zsh-syntax-highlighting
+
+      plugins = [
+        {
+          name = "auto-ls";
+          src = auto-ls;
+          file = "auto-ls.zsh";
+        }
+        {
+          name = "fzf-zsh-plugin";
+          src = fzf-zsh-plugin;
+          file = "fzf-zsh-plugin.plugin.zsh";
+        }
+      ];
 
       initContent = ''
         # Starship prompt
@@ -48,9 +74,8 @@ in
         export VISUAL="nvim"
         export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --color=bg+:#24283b,fg+:#c0caf5,pointer:#7aa2f7,hl:#f7768e"
 
-        # Source plugins if they exist
-        [ -f $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh ] && source $HOME/.config/zsh/plugins/auto-ls/auto-ls.zsh
-        [ -f $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh ] && source $HOME/.config/zsh/plugins/fzf-zsh-plugin/fzf-zsh-plugin.plugin.zsh
+        # Source fzf key-bindings
+        source "${fzf-shell}/shell/key-bindings.zsh"
 
         # Keybindings
         bindkey '^ ' autosuggest-accept
@@ -98,8 +123,7 @@ in
         tree = "exa --tree --icons";
         v = "nvim";
         nd = ''() { nix develop $HOME/.config/home-manager#$1 -c zsh; echo "You entered the $1 dev shell!" }'';
-        rebuild = ''sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} ; notify-send "Rebuild complete!"'';
-        setup-zsh-plugins = ''$HOME/.config/zsh/setup-plugins.sh ; notify-send "Zsh plugins installed!"'';
+        rebuild = ''sudo nixos-rebuild switch --flake $HOME/.config/home-manager#${hostName} --show-trace ; notify-send "Rebuild complete!"'';
         # Git aliases
         gst = "git status";
         gco = "git checkout";
