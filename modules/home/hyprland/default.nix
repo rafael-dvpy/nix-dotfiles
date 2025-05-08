@@ -1,22 +1,19 @@
-{ inputs, pkgs, lib, config, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.modules.hyprland;
+let
+  cfg = config.modules.hyprland;
+  configDir = ./config;
+in {
+  options.modules.hyprland = { enable = mkEnableOption "Hyprland window manager"; };
 
-in
-{
-  options.modules.hyprland = { enable = mkEnableOption "hyprland"; };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      wofi
+      hyprland
       wlsunset
       wl-clipboard
-      hyprland
       grim
       slurp
-      waybar
-      dunst
-      foot
       kdePackages.dolphin
       playerctl
       brightnessctl
@@ -35,7 +32,6 @@ in
           hide_cursor = true;
           no_fade_in = false;
         };
-
         background = [
           {
             path = "screenshot";
@@ -43,7 +39,6 @@ in
             blur_size = 8;
           }
         ];
-
         input-field = [
           {
             size = "200, 50";
@@ -65,21 +60,10 @@ in
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
     home.file = {
-      ".config/hypr/hyprland.conf" = {
-        source = ./hyprland.conf;
-      };
-      ".config/home-manager/pics/tokyonight-wallpaper.png" = {
-        source = ./tokyonight-wallpaper.png;
-      };
-      ".config/wofi.css" = {
-        source = ./wofi.css;
-      };
-      "stuff/captures/.keep" = {
-        text = "";
-      };
-      "stuff/notes/.keep" = {
-        text = "";
-      };
+      ".config/hypr/hyprland.conf".source = "${configDir}/hyprland.conf";
+      ".config/hypr/tokyonight-wallpaper.png".source = "${configDir}/tokyonight-wallpaper.png";
+      "stuff/captures/.keep".text = "";
+      "stuff/notes/.keep".text = "";
     };
   };
 }

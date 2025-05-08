@@ -1,59 +1,80 @@
 {
-    "position": "top", 
-    //"height": 30,
-    "modules-left": ["hyprland/workspaces"],
-    "modules-right": ["network", "pulseaudio", "battery", "custom/date", "clock", "custom/power"],
-    // Modules configuration
-"hyprland/workspaces": {
-	"format": "{name}",
-       "persistent-workspaces": {
-       },
-}
-     },
-	"custom/date": {
-    		"format": "󰸗 {}",
-		"interval": 3600,
-		"exec": "$HOME/bin/waybar-date.sh"
-	},
-	"custom/power": {
-		"format": "󰐥",
-		"on-click": "$HOME/bin/waybar-power.sh"
-	},
-	"clock": {
-		"format": "󰅐 {:%H:%M}",
-        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        	"format-alt": "{:%Y-%m-%d}"
-	},
-	"battery": {
-        	"states": {
-            		"warning": 30,
-            		"critical": 15,
-        	},
-        	"format": "{icon} {capacity}%",
-        	"format-charging": "󰂄 {capacity}%",
-        	"format-plugged": "󰂄{capacity}%",
-        	"format-alt": "{time} {icon}",
-        	"format-full": "󱈑 {capacity}%",
-        	"format-icons": ["󱊡", "󱊢", "󱊣"]
-	},
-	"network": {
-        	"format-wifi": "  {essid}",
-        	"format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
-        	"format-linked": "{ifname} (No IP) 󰤮 ",
-        	"format-disconnected": "󰤮 Disconnected",
-        	"format-alt": "{ifname}: {ipaddr}/{cidr}"
-	},
-	"pulseaudio": {
-		"format": "{icon}  {volume}%",
-        	"format-muted": "󰖁 Muted",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
+  "layer": "top",
+  "position": "top",
+  "height": 32,
+  "spacing": 4,
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["network", "pulseaudio", "battery", "custom/weather", "custom/power", "tray"],
+  "hyprland/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "sort-by-number": true,
+    "persistent-workspaces": {
+      "*": 5
     }
+  },
+  "clock": {
+    "format": "󰅐 {:%H:%M %d/%m/%Y}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "right",
+      "format": {
+        "months": "<span color='#c0caf5'><b>{}</b></span>",
+        "days": "<span color='#cdd6f4'>{}</span>",
+        "weeks": "<span color='#7aa2f7'><b>W{}</b></span>",
+        "today": "<span color='#f7768e'><b><u>{}</u></b></span>"
+      }
+    },
+    "format-alt": "󰸗 {:%Y-%m-%d}"
+  },
+  "network": {
+    "format-wifi": "󰖩 {essid} ({signalStrength}%)",
+    "format-ethernet": "󰈀 {ipaddr}",
+    "format-disconnected": "󰖪 Disconnected",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "nm-applet"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰖁 Muted",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰂄 {capacity}%",
+    "format-full": "󱈑 {capacity}%",
+    "format-icons": ["󱊡", "󱊢", "󱊣"]
+  },
+  "custom/weather": {
+    "format": "🌡️ {}",
+    "interval": 1800,
+    "exec": "$HOME/bin/waybar-weather.sh",
+    "return-type": "string",
+    "tooltip": true
+  },
+  "custom/power": {
+    "format": "󰐥",
+    "on-click": "$HOME/bin/waybar-power.sh",
+    "return-type": "string"
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  }
 }

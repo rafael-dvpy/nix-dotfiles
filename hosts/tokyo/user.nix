@@ -1,22 +1,23 @@
 { config, lib, pkgs, inputs, hostname, ... }:
 
 {
-  # Import individual Home Manager modules for granularity
+  # Import Home Manager modules from subdirectories
   imports = [
-    ../../modules/home/hyprland.nix
-    ../../modules/home/waybar.nix
-    ../../modules/home/dunst.nix
-    ../../modules/home/zen.nix
-    ../../modules/home/gtk.nix
-    ../../modules/home/ghostty.nix
-    ../../modules/home/foot.nix
-    ../../modules/home/nvim.nix
-    ../../modules/home/scripts.nix
-    ../../modules/home/zsh.nix
-    ../../modules/home/git.nix
-    ../../modules/home/docker.nix
-    ../../modules/home/tmux.nix
-    ../../modules/home/packages.nix
+    ../../modules/home/hyprland/default.nix
+    ../../modules/home/waybar/default.nix
+    ../../modules/home/dunst/default.nix
+    ../../modules/home/zen/default.nix
+    ../../modules/home/gtk/default.nix
+    ../../modules/home/ghostty/default.nix
+    ../../modules/home/foot/default.nix
+    ../../modules/home/nvim/default.nix
+    ../../modules/home/scripts/default.nix
+    ../../modules/home/zsh/default.nix
+    ../../modules/home/git/default.nix
+    ../../modules/home/docker/default.nix
+    ../../modules/home/tmux/default.nix
+    ../../modules/home/wofi/default.nix
+    ../../modules/home/packages/default.nix
   ];
 
   # Home Manager user configuration
@@ -34,6 +35,7 @@
     dunst.enable = true;
     zen.enable = true;
     gtk.enable = true;
+    wofi.enable = true;
 
     # CLI tools
     ghostty.enable = true;
