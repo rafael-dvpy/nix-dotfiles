@@ -11,7 +11,10 @@
     ./audio
     ./greetd
     ./remaps
+    inputs.sops-nix.nixosModules.sops
+    ./sops.nix
   ];
+
 
   fonts.enable = true;
   audio.enable = true;
@@ -20,7 +23,7 @@
   remaps.enable = true;
 
   services.devmon.enable = true;
-  services.gvfs.enable = true; 
+  services.gvfs.enable = true;
   services.udisks2.enable = true;
   environment.defaultPackages = [ ];
   services.xserver.desktopManager.xterm.enable = false;
@@ -92,10 +95,14 @@
 
   services.libinput.enable = true;
 
+  sops.secrets.rafael-password.neededForUsers = true;
+  users.mutableUsers = false;
+
   users.users.rafael = {
     isNormalUser = true;
     description = "Rafael Oliveira";
-    extraGroups = ["disk" "uinput" "docker" "networkmanager" "wheel" ];
+    hashedPasswordFile = config.sops.secrets.rafael-password.path;
+    extraGroups = [ "disk" "uinput" "docker" "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       #  thunderbir
@@ -104,7 +111,7 @@
   };
 
   # Allow unfree packages
-nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "24.11"; # Did you read the comment?
 

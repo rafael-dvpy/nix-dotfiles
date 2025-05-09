@@ -8,9 +8,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, zen-browser, sops-nix, ... }@inputs:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -19,23 +23,24 @@
       commonHomeManager = { system, hostname, userConfig }: {
         useUserPackages = true;
         useGlobalPkgs = true;
-        extraSpecialArgs = { 
+        extraSpecialArgs = {
           inherit inputs system hostname;
-          hostName = hostname; # Backward compatibility
+          hostName = hostname;
         };
         users.rafael = userConfig;
       };
 
-      mkNixosConfig = { system, hostname, hardwareConfig, userConfig }: 
+      mkNixosConfig = { system, hostname, hardwareConfig, userConfig }:
         nixpkgs.lib.nixosSystem {
-          specialArgs = { 
+          specialArgs = {
             inherit inputs system hostname;
-            hostName = hostname; # Backward compatibility
+            hostName = hostname;
           };
           modules = [
             { networking.hostName = hostname; }
             ./modules/config-modules/default.nix
             hardwareConfig
+            sops-nix.nixosModules.sops
             home-manager.nixosModules.home-manager
             { home-manager = commonHomeManager { inherit system hostname userConfig; }; }
           ];
@@ -66,6 +71,7 @@
             luarocks
             nodejs
             lua-language-server
+            sops
           ];
         };
         node = pkgs.mkShell {
@@ -79,7 +85,8 @@
         };
       };
 
-    in {
+    in
+    {
       homeConfigurations.rafael = mkHomeConfig {
         system = "x86_64-linux";
         username = "rafael";
